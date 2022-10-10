@@ -1,0 +1,19 @@
+[patch.crates-io]
+proc-maps = { path = "lib/proc-maps" }
+
+[workspace]
+members = [
+    "fuzztruction_shared",
+    "scheduler",
+    "generator/agent",
+    "lib/proc-maps",
+    "lib/jail",
+    "lib/compute_coverage"
+]
+
+exclude = [
+    "lib/llvm-stackmap-rs"
+]
+
+[profile.dev]
+opt-level = 3

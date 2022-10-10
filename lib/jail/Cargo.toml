@@ -1,0 +1,12 @@
+[package]
+name = "jail"
+version = "0.1.0"
+authors = ["nbars <nils.bars@rub.de>", "mschloegel <moritz.schloegel@rub.de>"]
+edition = "2021"
+
+[dependencies]
+thiserror = "~1"
+anyhow = "~1"
+libc = "0.2.105"
+tempfile = "3.2.0"
+log = "0.4.14"

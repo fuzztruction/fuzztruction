@@ -1,0 +1,28 @@
+[package]
+name = "proc-maps"
+version = "0.2.1"
+authors = ["Julia Evans <julia@jvns.ca>", "Ben Frederickson <github@benfrederickson.com>", "Adam Jensen <adam@acj.sh>"]
+description = "Helper crate for getting virtual memory maps from processes"
+license = "MIT"
+homepage = "https://github.com/rbspy/proc-maps"
+repository = "https://github.com/rbspy/proc-maps"
+
+[dependencies]
+libc = "0.2.54"
+serde = { version = "~1", features = ["derive"]}
+serde_json = "~1"
+
+[target.'cfg(target_os="macos")'.dependencies]
+anyhow = "1.0.40"
+mach2 = "0.4.0"
+libproc = "0.10.0"
+
+[target.'cfg(windows)'.dependencies]
+winapi = {version = "0.3", features = ["tlhelp32", "processthreadsapi", "handleapi", "impl-default", "dbghelp"]}
+
+[target.'cfg(target_os="freebsd")'.build-dependencies]
+bindgen = { version = "0.59.1", optional = true }
+
+[features]
+default = ["generate-bindings"]
+generate-bindings = ["bindgen"]

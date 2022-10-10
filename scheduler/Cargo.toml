@@ -1,0 +1,68 @@
+[package]
+name = "scheduler"
+version = "0.1.0"
+authors = ["nbars <nils.bars@rub.de>", "mschloegel <moritz.schloegel@rub.de>"]
+edition = "2021"
+default-run = "fuzztruction"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "benchmark_sink"
+path = "src/cli/benchmark_sink.rs"
+
+[[bin]]
+name = "fuzztruction"
+path = "src/cli/fuzztruction.rs"
+
+[features]
+#default = ["introspection"]
+introspection = []
+
+[dependencies]
+elf = "~0"
+gimli = "~0"
+keystone = { git = "https://github.com/keystone-engine/keystone" }
+posixmq = "~0"
+rand = "~0"
+nix = "~0"
+proc-maps = "~0"
+shared_memory = {git = "https://github.com/elast0ny/shared_memory-rs", rev = "4879c7641f64d444420b81fd32f496939ee7155d", package = "shared_memory"}
+mktemp = "~0"
+tempfile = "~3"
+libc = "~0"
+fuzztruction_shared = { path = "../fuzztruction_shared" }
+generator-agent = { path = "../generator/agent" }
+sha2 = "~0"
+hex = "~0"
+serde = { version = "~1", features = ["derive", "rc"]}
+serde_json = "~1"
+lazy_static = "~1"
+signal = "~0"
+filedescriptor = "~0"
+capstone = "0.7.0"
+anyhow = "~1"
+thiserror = "~1"
+yaml-rust = "0.4.5"
+clap = { version = "3.0.0-beta.2" }
+log = { version = "~0", features = ["kv_unstable"] }
+fern = { version = "~0", features = ["colored"] }
+simple_logger = "~1"
+core_affinity = "0.5.10"
+signal-hook = "0.3.10"
+ahash = "0.7.4"
+prettytable-rs = "^0.8"
+regex = "1.5.4"
+jail = { path = "../lib/jail" }
+ansi_term = "0.12"
+byte-unit = "4.0.13"
+maplit = "1.0.2"
+chrono = { version = "~0.4", features = ["serde"] }
+rayon = "1.5.1"
+linked-hash-map = "0.5.4"
+dot = "0.1.4"
+itertools = "~0"
+glob = "0.3.0"
+flate2 = "1.0.22"
+fs_extra = "1.2.0"
+llvm_stackmap =  {version = "0.1.4", features = ["serde"] }

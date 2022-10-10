@@ -1,0 +1,7 @@
+*.so
+*.o
+*.a
+**/.cache
+pass/fuzztruction-source-clang-fast
+pass/fuzztruction-source-clang-fast++
+pass/mem_functions.ll

@@ -1,0 +1,24 @@
+bash_history
+zsh_history
+Cargo.lock
+target
+.vscode
+**/perf.data
+**/perf.data.old
+
+.ccache
+/data/ccache
+
+**/eval-results/done-runs/**
+**/eval-scripts/*_coverage.pdf
+eval-targets
+eval-results
+
+# ida related
+**/*.id[0-9]
+**/*.nam
+**/*.til
+
+# python stuff
+__pycache__
+

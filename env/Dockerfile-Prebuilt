@@ -1,0 +1,7 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} as build
+
+ARG WORKDIR_PATH
+RUN test -n "$WORKDIR_PATH"
+
+COPY --chown=user:user /${WORKDIR_PATH} /home/user/fuzztruction

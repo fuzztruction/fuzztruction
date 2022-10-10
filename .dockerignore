@@ -1,0 +1,12 @@
+llvm
+target
+targets
+eval-targets
+eval-results
+eval-scripts
+.git
+.ccache
+bash_history
+zsh_history
+fuzztruction-experiments
+data/ccache

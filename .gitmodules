@@ -1,0 +1,9 @@
+[submodule "lib/llvm-stackmap-rs"]
+	path = lib/llvm-stackmap-rs
+	url = https://github.com/fuzztruction/llvm-stackmap-rs.git
+[submodule "fuzztruction-experiments"]
+	path = fuzztruction-experiments
+	url = https://github.com/fuzztruction/fuzztruction-experiments.git
+[submodule "llvm"]
+        path = llvm
+        url = https://github.com/fuzztruction/fuzztruction-llvm.git

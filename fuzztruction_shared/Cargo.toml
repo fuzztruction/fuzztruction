@@ -1,0 +1,29 @@
+[package]
+name = "fuzztruction_shared"
+version = "0.1.0"
+authors = ["Nils Bars <nils.bars@rub.de>"]
+edition = "2018"
+
+[dependencies]
+shared_memory = {git = "https://github.com/elast0ny/shared_memory-rs", rev = "4879c7641f64d444420b81fd32f496939ee7155d", package = "shared_memory"}
+posixmq = "~0"
+strum_macros = "~0"
+serde = { version = "~1", features = ["derive"]}
+serde_json = "~1"
+libc = "~0"
+rand = "~0"
+num_enum = "~0"
+lazy_static = "~1"
+signal-hook = "~0"
+anyhow = "~1"
+thiserror = "~1"
+log = { version = "~0", features = ["kv_unstable", "serde"] }
+fern = "~0"
+md5 = "0.7.0"
+nix = "~0"
+byte-unit = "4.0.13"
+llvm_stackmap =  {version = "0.1.4", features = ["serde"] }
+
+[dependencies.memoffset]
+version = "~0"
+features = ["unstable_const"]

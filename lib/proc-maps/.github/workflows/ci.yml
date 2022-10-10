@@ -1,0 +1,129 @@
+name: CI
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+  schedule:
+  - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  format:
+    name: Check code formatting
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        default: true
+        toolchain: stable
+    - name: Run cargo fmt
+      run: |
+        cargo fmt --all -- --check
+
+  build:
+    name: Build and test
+    env:
+      CARGO: cargo
+      TARGET_FLAGS: --target ${{ matrix.target }}
+      RUST_BACKTRACE: 1
+    timeout-minutes: 30
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        build:
+        - linux-x86_64
+        - macos-10.15
+        - macos-11
+        - windows
+        include:
+        - build: linux-x86_64
+          os: ubuntu-20.04
+          run-tests: 'true'
+          target: x86_64-unknown-linux-gnu
+        - build: macos-10.15
+          os: macos-10.15
+          run-tests: 'true'
+          target: x86_64-apple-darwin
+        - build: macos-11
+          os: macos-11
+          run-tests: 'true'
+          target: x86_64-apple-darwin
+        - build: windows
+          os: windows-2022
+          run-tests: 'true'
+          target: x86_64-pc-windows-msvc
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        default: true
+        toolchain: stable
+    - name: Install Rust toolchain target
+      run: |
+        rustup target add ${{ matrix.target }}
+    - name: Cargo Cache
+      uses: actions/cache@v2.1.4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+        key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.target }}-cargo-
+    - name: Build
+      run: ${{ env.CARGO }} build --release --verbose --workspace --all-targets ${{ env.TARGET_FLAGS }}
+    - name: Run tests
+      timeout-minutes: 5
+      run: ${{ env.CARGO }} test --release --verbose  ${{ env.TARGET_FLAGS }}
+      if: runner.os != 'macOS' && matrix.run-tests == 'true'
+    - name: Run tests
+      timeout-minutes: 5
+      run: sudo ${{ env.CARGO }} test --release --verbose  ${{ env.TARGET_FLAGS }}
+      if: runner.os == 'macOS' && matrix.run-tests == 'true'
+
+  build-freebsd:
+    name: Build and test (freebsd-x86_64)
+    runs-on: macos-10.15
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        box:
+          - fbsd_12_2
+          - fbsd_13_0
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Vagrant box
+        uses: actions/cache@v2
+        with:
+          path: ~/.vagrant.d
+          key: ${{ matrix.box }}-vagrant-boxes-${{ hashFiles('ci/Vagrantfile') }}
+          restore-keys: |
+            ${{ matrix.box }}-vagrant-
+      - name: Cache Cargo and build artifacts
+        uses: actions/cache@v2.1.4
+        with:
+          path: build-artifacts.tar
+          key: ${{ matrix.box }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ matrix.box }}-cargo-
+      - name: Set up VM
+        run: |
+          ln -sf ci/Vagrantfile Vagrantfile
+
+          if [ ! -d ~/.vagrant.d/boxes/rbspy-VAGRANTSLASH-FreeBSD-12.2-STABLE ]; then
+            vagrant box add rbspy/FreeBSD-12.2-STABLE https://github.com/rbspy/freebsd-vagrant-box/releases/download/20211124/fbsd_12_2.box
+          fi
+          if [ ! -d ~/.vagrant.d/boxes/rbspy-VAGRANTSLASH-FreeBSD-13.0-RELEASE ]; then
+            vagrant box add rbspy/FreeBSD-13.0-RELEASE https://github.com/rbspy/freebsd-vagrant-box/releases/download/20211203-2/fbsd_13_0.box
+          fi
+          vagrant up ${{ matrix.box }}
+      - name: Build and test
+        run: vagrant ssh ${{ matrix.box }} -- bash /vagrant/ci/scripts/freebsd-build.sh
