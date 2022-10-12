@@ -1,6 +1,5 @@
 # Fuzztruction
-<p><a href="https://mu00d8.me/paper/bars2023fuzztruction.pdf"><img alt="Fuzztruction Paper Thumbnail" align="right" width="320" src="https://user-images.githubusercontent.com/18148299/150141920-3f054255-2b73-41d2-aa11-27a1e42f5302.png"></a></p>
-
+<p><a href="https://mu00d8.me/paper/bars2023fuzztruction.pdf"><img alt="Fuzztruction Paper Thumbnail" align="right" width="320" src="https://user-images.githubusercontent.com/1810786/195389564-c517ea66-7fee-4b7e-8230-72fee0bd8061.jpg"></a></p>
 
 Fuzztruction is an academic prototype of a fuzzer that does not directly mutate inputs (as most fuzzers do) but instead uses a so-called generator application to produce an input for our fuzzing target. As programs generating data usually produce the correct representation, our fuzzer *mutates* the generator program (by injecting faults), such that the data produced is *almost* valid. Optimally, the produced data passes the parsing stages in our fuzzing target, called *consumer*, but triggers unexpected behavior in deeper program logic. This allows to even fuzz targets that utilize cryptography primitives such as encryption or message integrity codes. The main advantage of our approach is that it generates complex data without requiring heavyweight program analysis techniques, grammar approximations, or human intervention.
 
