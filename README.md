@@ -56,7 +56,7 @@ The implementation of the generator can be found in the [`generator`](./generato
 #### ****Compiler Pass****
 The compiler pass ([`generator/pass`](./generator/pass/)) instruments the target using so-called [patch points](https://llvm.org/docs/StackMaps.html). Since the current (tested on LLVM12 and below) implementation of this feature is unstable, we patch LLVM to enable them for our approach. The patches can be found in the [`llvm`](https://github.com/fuzztruction/fuzztruction-llvm) repository (included here as submodule). Please note that the patches are experimental and not intended for use in production.
 
-The locations of the patch points are recorded in a separate section inside the compiled binary. The code related to parsing this section can be found at [`lib/llvm-stackmap-rs`]([./lib/llvm-stackmap-rs/](https://github.com/fuzztruction/llvm-stackmap-rs)), which we also published on [crates.io](https://crates.io/crates/llvm_stackmap).
+The locations of the patch points are recorded in a separate section inside the compiled binary. The code related to parsing this section can be found at [`lib/llvm-stackmap-rs`](https://github.com/fuzztruction/llvm-stackmap-rs), which we also published on [crates.io](https://crates.io/crates/llvm_stackmap).
 
 During fuzzing, the scheduler chooses a target from the set of patch points and passes its decision down to the agent (described below) responsible for applying the desired mutation for the given patch point.
 
