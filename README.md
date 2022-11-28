@@ -1,6 +1,5 @@
 # Fuzztruction
-<p><a href="https://mu00d8.me/paper/bars2023fuzztruction.pdf"><img alt="Fuzztruction Paper Thumbnail" align="right" width="320" src="https://user-images.githubusercontent.com/1810786/196907738-187f0e58-99f5-448a-beab-d1743a564bb8.png"></a></p>
-
+<p><a href="https://mu00d8.me/paper/bars2023fuzztruction.pdf"><img alt="Fuzztruction Paper Thumbnail" align="right" width="320" src="https://user-images.githubusercontent.com/1810786/204243236-9d0ddd3b-82c2-4b82-9859-d93ded3ea7e7.png"></a></p>
 
 
 
