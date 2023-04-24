@@ -1,6 +1,5 @@
 bash_history
 zsh_history
-Cargo.lock
 target
 .vscode
 **/perf.data
