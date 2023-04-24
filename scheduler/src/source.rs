@@ -1681,7 +1681,8 @@ fn parse_file_backed_mappings(mappings: Vec<&MapRange>) -> Vec<PatchPoint> {
                 continue;
             }
 
-            let elf_file = match elf::File::open_path(path) {
+            let data = fs::read(path).unwrap();
+            let elf_file = match elf::ElfBytes::<elf::endian::AnyEndian>::minimal_parse(&data) {
                 Ok(f) => f,
                 Err(_) => panic!("File not found"),
             };

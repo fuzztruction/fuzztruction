@@ -1,4 +1,4 @@
-use std::{convert::TryInto, fs::OpenOptions, ops::Range, path::Path};
+use std::{convert::TryInto, fs::{OpenOptions, self}, ops::Range, path::Path};
 
 use fuzztruction_shared::{
     constants::PATCH_POINT_SIZE, mutation_cache::MutationCacheEntryFlags,
@@ -117,17 +117,17 @@ impl PatchPoint {
     }
 }
 
-pub fn from_stackmap(map: &StackMap, mapping: &MapRange, elf_file: &elf::File) -> Vec<PatchPoint> {
+pub fn from_stackmap(map: &StackMap, mapping: &MapRange, elf_file: &elf::ElfBytes<elf::endian::AnyEndian>) -> Vec<PatchPoint> {
     let mut idx: usize = 0;
     let mut patch_points = Vec::new();
 
     // If it is PIC, the base is the start address of the mapping.
     // If not, the addresses in the stackmap are absolute.
     assert!(matches!(
-        elf_file.ehdr.elftype,
-        elf::types::ET_DYN | elf::types::ET_EXEC
+        elf_file.ehdr.e_type,
+        elf::abi::ET_DYN | elf::abi::ET_EXEC
     ));
-    let is_pic = elf_file.ehdr.elftype == elf::types::ET_DYN;
+    let is_pic = elf_file.ehdr.e_type == elf::abi::ET_DYN;
     let base = is_pic.then(|| mapping.start()).unwrap_or(0) as u64;
 
     //let mut seen_vmas = HashSet::new();
@@ -180,11 +180,12 @@ pub fn from_stackmap(map: &StackMap, mapping: &MapRange, elf_file: &elf::File) -
 }
 
 pub fn elf_is_pic(path: impl AsRef<Path>) -> Option<bool> {
-    let file = match elf::File::open_path(&path) {
+    let data = fs::read(path).unwrap();
+    let file = match elf::ElfBytes::<elf::endian::AnyEndian>::minimal_parse(&data) {
         Ok(f) => f,
         Err(_) => panic!("File not found"),
     };
-    Some(file.ehdr.elftype == elf::types::ET_DYN)
+    Some(file.ehdr.e_type == elf::abi::ET_DYN)
 }
 
 impl From<&PatchPoint> for Box<MutationCacheEntry> {
