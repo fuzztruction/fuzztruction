@@ -5,9 +5,24 @@
 
 Fuzztruction is an academic prototype of a fuzzer that does not directly mutate inputs (as most fuzzers do) but instead uses a so-called generator application to produce an input for our fuzzing target. As programs generating data usually produce the correct representation, our fuzzer *mutates* the generator program (by injecting faults), such that the data produced is *almost* valid. Optimally, the produced data passes the parsing stages in our fuzzing target, called *consumer*, but triggers unexpected behavior in deeper program logic. This allows to even fuzz targets that utilize cryptography primitives such as encryption or message integrity codes. The main advantage of our approach is that it generates complex data without requiring heavyweight program analysis techniques, grammar approximations, or human intervention.
 
+For more details, check out our [paper](https://mschloegel.me/paper/bars2023fuzztruction.pdf). To cite our work, you can use the following BibTeX entry:
+```bibtex
+@inproceedings{bars2023fuzztruction,
+  title={Fuzztruction: Using Fault Injection-based Fuzzing to Leverage Implicit Domain Knowledge},
+  booktitle = {32st USENIX Security Symposium (USENIX Security 23)},
+  publisher = {USENIX Association},
+  year={2023},
+  author={Bars, Nils and Schloegel, Moritz and Scharnowski, Tobias and Schiller, Nico and Holz, Thorsten},
+}
+```
+
 For instructions on how to reproduce the experiments from the paper, please read the [`fuzztruction-experiments`](https://github.com/fuzztruction/fuzztruction-experiments) submodule documentation *after* reading this document.
 
 > <b><span style="color:red">Compatibility:</span></b> While we try to make sure that our prototype is as platform independent as possible, we are not able to test it on all platforms. Thus, if you run into issues, please use Ubuntu 22.04.1, which was used during development as the host system.
+
+
+
+
 
 ## Quickstart
 ```bash
